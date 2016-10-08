@@ -1,14 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.warmuuh</groupId>
 	<artifactId>libsass-maven-plugin</artifactId>
-	<version>0.1.8-libsass_3.2.4-SNAPSHOT</version>
+	<version>0.2.5-libsass_3.3.4-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>libsass plugin</name>
 	<description>Libsass plugin for maven</description>
 	<url>https://github.com/warmuuh/libsass-maven-plugin</url>
+	<scm>
+		<url>https://github.com/warmuuh/libsass-maven-plugin</url>
+		<connection>scm:git:https://github.com/warmuuh/libsass-maven-plugin</connection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<distributionManagement>
 		<repository>
@@ -42,21 +46,12 @@
 			<organizationUrl>https://github.com/warmuuh</organizationUrl>
 		</developer>
 	</developers>
-	<scm>
-		<url>https://github.com/warmuuh/libsass-maven-plugin</url>
-	</scm>
 
 	<dependencies>
 		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>4.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.nativelibs4java</groupId>
-			<artifactId>jnaerator-runtime</artifactId>
-			<version>0.12</version>
-			<scope>compile</scope>
+			<groupId>io.bit3</groupId>
+			<artifactId>jsass</artifactId>
+			<version>5.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -76,25 +71,42 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.nativelibs4java</groupId>
-				<artifactId>maven-jnaerator-plugin</artifactId>
-				<version>0.12</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<tagNameFormat>@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+				</configuration>
 				<executions>
 					<execution>
-						<phase>generate-sources</phase>
+						<id>mojo-descriptor</id>
 						<goals>
-							<goal>generate</goal>
+							<goal>descriptor</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -107,6 +119,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -119,33 +132,25 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<id>test</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${basedir}/target/generated-sources</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>gpg</id>
+			<id>release</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.3</version>
+						<extensions>true</extensions>
+						<configuration>
+							<nexusUrl>https://oss.sonatype.org</nexusUrl>
+							<serverId>oss-sonatype-release</serverId>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
@@ -164,4 +169,6 @@
 		</profile>
 
 	</profiles>
+
+
 </project>

@@ -2,9 +2,14 @@ Libsass Maven Plugin [![Build Status](https://travis-ci.org/warmuuh/libsass-mave
 ==========
 
 Libsass Maven Plugin uses [libsass](http://github.com/hcatlin/libsass) to compile sass files.
-Uses Jna to interface with C-library.
+Uses [jsass](https://github.com/bit3/jsass) to interface with C-library.
 
 Changelog:
+* 0.2.4 - fixed bug with empty spaces in path
+* 0.2.3 - upgrade to libsass 3.3.4
+* 0.2.2  - minor bugfixes, readded m2e lifecycle mapping 
+* 0.2.1 - updated libsass to 3.3.3
+* 0.2.0 - switched native bindings to bit3 bindings (using libsass 3.3.2), **java8-only**
 * 0.1.7 - UTF8 encoding issue, used wrong file extension for sass style
 * 0.1.6 - added m2e eclipse intergation, thanks @dashorst
 * 0.1.5 - readded macOs binaries, thanks @tommix1987
@@ -31,7 +36,7 @@ Configure plugin in your pom.xml:
       <plugin>
          <groupId>com.github.warmuuh</groupId>
          <artifactId>libsass-maven-plugin</artifactId>
-         <version><VERSION>-libsass_3.2.4</version>
+         <version><VERSION>-libsass_3.3.3</version>
          <executions>
             <execution>
                <phase>generate-resources</phase>
@@ -161,10 +166,6 @@ Configuration Elements
     </tr>
   </tbody>
 </table>
-
-For windows, linux64 there are binaries included.
-
-For rest: you probably have to compile libsass and add it by using -Djna.library.path=(path to the binary)
 
 
 License
